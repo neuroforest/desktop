@@ -1,0 +1,11 @@
+{
+  "name": "NeuroDesktop",
+  "main": "../source/index.html",
+  "window": {
+    "frame": true,
+    "transparent": false,
+    "width": 1230,
+    "height": 870
+  },
+  "chromium-args": "--mixed-context --enable-spell-checking --allow-file-access-from-files --allow-file-access --allow-file-cookies"
+}
