@@ -1,12 +1,11 @@
+import logging
 import os
 import sys
 import subprocess
 
 import neo4j
 
-import logging
-
-from neuro.tools.api import tw_get
+from neuro.tools.tw5api import tw_get, tw_actions
 from neuro.utils import config, network_utils
 
 
@@ -40,7 +39,7 @@ def register_protocol():
 
     try:
         tid_title = tw_get.filter_output(f"[search:neuro.id[{uuid}]]")[0]
-        subprocess.run(["neuro", "open", tid_title])
+        tw_actions.open_tiddler(tid_title)
     except IndexError:
         print(f"Not found: {uuid}")
 
