@@ -40,8 +40,8 @@ async function loadTiddlersFromNeo4j() {
 
     // Cypher to fetch all tiddlers and their properties
     const cypherQuery = `
-      MATCH (o:Object)
-      RETURN properties(o) AS fields
+      MATCH (t:Tiddler)
+      RETURN properties(t) AS fields;
     `;
 
     const result = await session.run(cypherQuery);
