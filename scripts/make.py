@@ -1,11 +1,12 @@
 import os
 import shutil
 import subprocess
+import sys
 import time
 
-from neuro.utils import config, internal_utils
-from neuro.tools.local import assemble
+from neuro.utils import config, internal_utils, time_utils
 from neuro.tools.terminal import style
+from neuro.core.deep import Dir
 
 
 def copy_nwjs():
@@ -33,6 +34,7 @@ def copy_tw5():
         BUILD_DIR
     ]
     subprocess.run(rsync_copy_command, check=True, stdout=subprocess.DEVNULL)
+    shutil.rmtree(f"{BUILD_DIR}/tw5/.git")
 
 
 def copy_source():
@@ -54,18 +56,26 @@ def install_node_modules():
     os.chdir(BUILD_DIR)
     subprocess.run([
         "npm",
-        "install", "-l"
+        "install", "-l",
         "fs",
         "neo4j-driver"
-    ])
+    ], stdout=subprocess.DEVNULL)
+
+
+def archive():
+    global BUILD_DIR
+    archive_name = f"build-{time_utils.DATE_ISO}"
+    BUILD_DIR = internal_utils.get_path("archive") + f"/desktop/{archive_name}"
+    print(f"Creating desktop archive {archive_name}")
+    main()
 
 
 def main():
     start_time = time.time()
     os.makedirs(BUILD_DIR, exist_ok=True)
     copy_nwjs()
+    internal_utils.copy_plugins_and_themes()
     copy_tw5()
-    assemble.copy_plugins_and_themes()
     copy_source()
     install_node_modules()
     end_time = time.time()
@@ -73,5 +83,15 @@ def main():
 
 
 if __name__ == "__main__":
-    BUILD_DIR = os.getenv("BUILD")
-    main()
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "archive":
+            archive()
+        else:
+            custom_build_path = sys.argv[1]
+            if not os.path.isabs(custom_build_path):
+                custom_build_path = os.path.abspath(custom_build_path)
+            BUILD_DIR = custom_build_path
+            main()
+    else:
+        BUILD_DIR = os.getenv("BUILD")
+        main()
