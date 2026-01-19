@@ -2,8 +2,6 @@ import os
 import shutil
 import subprocess
 
-from neuro.utils import config
-
 
 class Nwjs:
     def __init__(self, nwjs_version=None, nwjs_url=None, overwrite=False):

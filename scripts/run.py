@@ -6,7 +6,7 @@ import subprocess
 import neo4j
 
 from neuro.tools.tw5api import tw_get, tw_actions
-from neuro.utils import config, network_utils
+from neuro.utils import network_utils
 
 
 def verify_neo4j():
@@ -19,7 +19,7 @@ def verify_neo4j():
     try:
         neo4j_driver.verify_connectivity()
         print("Neo4j connected")
-    except neo4j.exceptions.ServiceUnavailable as e:
+    except neo4j.exceptions.ServiceUnavailable:
         print(f"Neo4j inaccessible: {uri}")
         sys.exit(1)
     except Exception as e:

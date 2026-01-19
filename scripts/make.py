@@ -4,9 +4,7 @@ import subprocess
 import sys
 import time
 
-from neuro.utils import config, internal_utils, time_utils
-from neuro.tools.terminal import style
-from neuro.core.deep import Dir
+from neuro.utils import internal_utils, time_utils, terminal_style
 
 
 def copy_nwjs():
@@ -79,7 +77,7 @@ def main():
     copy_source()
     install_node_modules()
     end_time = time.time()
-    print(f"{style.SUCCESS} {style.BOLD}Finished in {end_time - start_time:.1f} s.{style.RESET}")
+    print(f"{terminal_style.SUCCESS} {terminal_style.BOLD}Finished in {end_time - start_time:.1f} s.{terminal_style.RESET}")
 
 
 if __name__ == "__main__":
