@@ -1,6 +1,7 @@
 {
   "name": "NeuroDesktop",
   "main": "../source/index.html",
+  "single-instance": false,
   "window": {
     "frame": true,
     "transparent": false,
