@@ -7,6 +7,9 @@ import time
 from neuro.utils import internal_utils, time_utils, terminal_style
 
 
+BUILD_DIR = None
+
+
 def copy_nwjs():
     print("Building: NW.js")
     nwjs_dir = internal_utils.get_path("desktop") + "/nwjs"
@@ -68,7 +71,12 @@ def archive():
     main()
 
 
-def main():
+def main(build_dir=None):
+    global BUILD_DIR
+    if build_dir:
+        BUILD_DIR = build_dir
+    else:
+        BUILD_DIR = os.getenv("BUILD")
     start_time = time.time()
     os.makedirs(BUILD_DIR, exist_ok=True)
     copy_nwjs()
@@ -88,8 +96,6 @@ if __name__ == "__main__":
             custom_build_path = sys.argv[1]
             if not os.path.isabs(custom_build_path):
                 custom_build_path = os.path.abspath(custom_build_path)
-            BUILD_DIR = custom_build_path
-            main()
+            main(custom_build_path)
     else:
-        BUILD_DIR = os.getenv("BUILD")
         main()
