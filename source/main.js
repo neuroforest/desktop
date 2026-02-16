@@ -73,7 +73,7 @@ async function loadTiddlersFromNeo4j() {
 
 // Wrap the main boot process in an async function
 (async () => {
-  const ndPort = process.env.ND_PORT
+  const ndPort = process.env.PORT
   const ndArgs = process.env.ND_ARGS.split(" ")
   var $tw = require("../tw5/boot/bootprefix.js").bootprefix()
   $tw.boot.argv = ["./tw5/editions/neuro-neo4j", "--listen", `port=${ndPort}`, ...ndArgs];
