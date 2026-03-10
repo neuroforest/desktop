@@ -71,10 +71,29 @@ async function loadTiddlersFromNeo4j() {
   }
 }
 
+// Close the HTTP server before page reload so the port is free on restart
+window.addEventListener("beforeunload", function() {
+  if (global._nodeServer) {
+    global._nodeServer.close();
+  }
+  if (global._neo4jDriver) {
+    global._neo4jDriver.close();
+  }
+});
+
 // Wrap the main boot process in an async function
 (async () => {
   const port = process.env.PORT
   const args = (process.env.DESKTOP_ARGS || "").split(" ").filter(Boolean)
+  // Intercept http.createServer to capture the server reference for cleanup
+  global._neo4jDriver = driver;
+  const http = require("http");
+  const _origCreateServer = http.createServer.bind(http);
+  http.createServer = function(...args) {
+    const server = _origCreateServer(...args);
+    global._nodeServer = server;
+    return server;
+  };
   var $tw = require("../tw5/boot/bootprefix.js").bootprefix()
   $tw.boot.argv = ["./tw5/editions/neuro-neo4j", "--listen", `port=${port}`, ...args];
   const preloadData = await loadTiddlersFromNeo4j();
