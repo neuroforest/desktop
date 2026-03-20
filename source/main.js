@@ -95,7 +95,8 @@ window.addEventListener("beforeunload", function() {
     return server;
   };
   var $tw = require("../tw5/boot/bootprefix.js").bootprefix()
-  $tw.boot.argv = ["./tw5/editions/neuro-neo4j", "--listen", `port=${port}`, ...args];
+  const edition = process.env.TW5_EDITION || "neuro-neo4j";
+  $tw.boot.argv = [`./tw5/editions/${edition}`, "--listen", `port=${port}`, ...args];
   const preloadData = await loadTiddlersFromNeo4j();
   $tw.preloadTiddlers = preloadData;
   var $tw = require("../tw5/boot/boot.js").TiddlyWiki($tw);
